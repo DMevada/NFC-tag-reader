@@ -2,7 +2,7 @@ from sys import stdin
 from subprocess import call
 
 def begin(tagId):
-	call(["./display", tagId])
+	call(["./first", tagId])
 
 while True:
 	print "Enter a number: "
