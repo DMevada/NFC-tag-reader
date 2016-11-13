@@ -4,6 +4,8 @@ import RPi.GPIO as GPIO
 import MFRC522
 import signal
 import time
+from subprocess import call
+import controller
 
 continue_reading = True
 
@@ -45,6 +47,9 @@ while continue_reading:
 
         # Print UID
         print "Card read UID: "+str(uid[0])+","+str(uid[1])+","+str(uid[2])+","+str(uid[3])
+
+        #call to assembly to display binary
+        controller.assemble(uid[0])
 
         a = str(bin(uid[0]))[2:] #convert uid to binary
 
