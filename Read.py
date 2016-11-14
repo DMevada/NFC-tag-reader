@@ -48,6 +48,7 @@ while continue_reading:
         # Print UID
         print "Card read UID: "+str(uid[0])+","+str(uid[1])+","+str(uid[2])+","+str(uid[3])
 
+        print "Processin binary...\n"
         #call to assembly to display binary
         controller.assemble(uid[0])
 
@@ -63,8 +64,10 @@ while continue_reading:
         for i in xrange(8-len(a)):
             a = '0' + a
 
+        print "Final binary string: " + a
+        print "Activating lights for 5 seconds..."
+
         try:
-            print "Binary: " + a
 
             for i in xrange(8):
                 if a[7-i] == '1':
@@ -73,7 +76,7 @@ while continue_reading:
                     GPIO.output(LedPin[i], GPIO.HIGH)# LED off
 
             time.sleep(5) # Keep LED on for 5 seconds
-            print "Lights off...\nReady to scan again...\n\n"
+            print "\nLights off...\nReady to scan again...\n\n"
 
             for i in xrange(8):
                 GPIO.output(LedPin[i], GPIO.HIGH)
@@ -93,12 +96,12 @@ while continue_reading:
         MIFAREReader.MFRC522_SelectTag(uid)
 
         # Authenticate
-        status = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, key, uid)
+        #status = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, key, uid)
 
         # Check if authenticated
-        if status == MIFAREReader.MI_OK:
-            MIFAREReader.MFRC522_Read(8)
-            MIFAREReader.MFRC522_StopCrypto1()
-        else:
-            print "Authentication error"
+        #if status == MIFAREReader.MI_OK:
+        #    MIFAREReader.MFRC522_Read(8)
+        #    MIFAREReader.MFRC522_StopCrypto1()
+        #else:
+        #    print "Authentication error"
 

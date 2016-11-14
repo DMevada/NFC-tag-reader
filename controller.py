@@ -62,7 +62,7 @@ def assemble(tagID):
         f.write("ldr R0, =" + str(tagID) + '\n')
         f.write(as_bottom)
 
-    call(["as","-o","dec2bin1.o","dec2bin1.s"])
+    call(["as","-W","-o","dec2bin1.o","dec2bin1.s"])
     call(["gcc","-o", "dec2bin1", "dec2bin1.o"])
 
     print call("./dec2bin1")
