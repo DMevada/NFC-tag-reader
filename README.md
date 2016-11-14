@@ -21,5 +21,5 @@ $ git clone https://github.com/DMevada/NFC-tag-reader.git
 $ cd NFC-tag-reader
 $ as -W -o dec2bin.o dec2bin.s
 $ gcc -o dec2bin dec2bin.o
-$ python control.py
+$ python Read.py
 ```
