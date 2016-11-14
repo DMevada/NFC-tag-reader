@@ -7,6 +7,43 @@ import time
 from subprocess import call
 import controller
 
+def LED(tagID):
+    a = str(bin(tagID))[2:] #convert uid to binary
+
+    GPIO.setmode(GPIO.BOARD) # Numbers pins by physical location
+
+    for i in xrange(8):
+        GPIO.setup(LedPin[i], GPIO.OUT) # Set pin mode as output
+        GPIO.output(LedPin[i], GPIO.HIGH) # Set pin to high (+3.3V) to turn LED off
+
+    #make sure a is of length 8
+    for i in xrange(8-len(a)):
+        a = '0' + a
+
+    print "Final binary string: " + a
+    print "Activating lights for 2.5 seconds..."
+
+    try:
+
+        for i in xrange(8):
+            if a[7-i] == '1':
+                GPIO.output(LedPin[i], GPIO.LOW) # LED on
+            else:
+                GPIO.output(LedPin[i], GPIO.HIGH)# LED off
+
+        time.sleep(2.5) # Keep LED on for 2.5 seconds
+
+        for i in xrange(8):
+            GPIO.output(LedPin[i], GPIO.HIGH)
+
+        GPIO.cleanup() #Release Resource
+
+    except KeyboardInterrupt:  # When 'Ctrl+C' is pressed, the flowing code will be  executed.
+
+        for i in xrange(8):
+            GPIO.output(LedPin[i], GPIO.HIGH) #LED off
+        GPIO.cleanup()                     # Release resource 
+
 continue_reading = True
 
 # start binary GPIO display    
@@ -49,45 +86,27 @@ while continue_reading:
         print "Card read UID: "+str(uid[0])+","+str(uid[1])+","+str(uid[2])+","+str(uid[3])
 
         print "Processin binary...\n"
+        
         #call to assembly to display binary
+        
+
+        print "UID 0: "
         controller.assemble(uid[0])
+        LED(uid[0])
 
-        a = str(bin(uid[0]))[2:] #convert uid to binary
+        print "UID 1: "
+        controller.assemble(uid[1])
+        LED(uid[1])
 
-        GPIO.setmode(GPIO.BOARD) # Numbers pins by physical location
+        print "UID 2: "
+        controller.assemble(uid[2])
+        LED(uid[2])
 
-        for i in xrange(8):
-            GPIO.setup(LedPin[i], GPIO.OUT) # Set pin mode as output
-            GPIO.output(LedPin[i], GPIO.HIGH) # Set pin to high (+3.3V) to turn LED off
+        print "UID 3: "
+        controller.assemble(uid[3])
+        LED(uid[3])
 
-        #make sure a is of length 8
-        for i in xrange(8-len(a)):
-            a = '0' + a
-
-        print "Final binary string: " + a
-        print "Activating lights for 5 seconds..."
-
-        try:
-
-            for i in xrange(8):
-                if a[7-i] == '1':
-                    GPIO.output(LedPin[i], GPIO.LOW) # LED on
-                else:
-                    GPIO.output(LedPin[i], GPIO.HIGH)# LED off
-
-            time.sleep(5) # Keep LED on for 5 seconds
-            print "\nLights off...\nReady to scan again...\n\n"
-
-            for i in xrange(8):
-                GPIO.output(LedPin[i], GPIO.HIGH)
-
-            GPIO.cleanup() #Release Resource
-
-        except KeyboardInterrupt:  # When 'Ctrl+C' is pressed, the flowing code will be  executed.
-
-            for i in xrange(8):
-                GPIO.output(LedPin[i], GPIO.HIGH) #LED off
-            GPIO.cleanup()                     # Release resource 
+        print "Ready to scan again...\n\n"
                                                                                                 
         # This is the default key for authentication
         key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
